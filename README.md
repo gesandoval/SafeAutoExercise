@@ -33,4 +33,8 @@ I took as base the webapi template, I build it from scratch all elements from th
       - At environment.ts the constant baseAPIUrl es set (should be set with the URI for the API)
       - Only one component and one service were developed
 
+
+To run the projects:
+- To run webAPI: Go to folder SafeAutoExercise, open a cmd windows and type dotnet run
+- to run clientApp: Go to folder SafeAutoClientApp, run ng install to download angular modules and then ng serve to run it. If needed change environment.ts baseAPIUrl to point in the correct port. 
 Thanks
