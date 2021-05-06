@@ -1,0 +1,13 @@
+Driver Dan
+Driver Alex
+Driver Bob
+Drvier Gesm
+Trip Dan 07:15 07:45 17.3
+Trip Dan 06:12 06:32 21.8
+Trip Alex 12:01 13:16 42.0
+Trip Alex 10:01 13:16 42.0
+Trip Gesm 13:01 13:16 102.0
+Trip Gesm 13:04 13:16 32.0
+Trip Alex 14:01 15:16 10.0
+Trip Alex 07:01 23:59 400.0
+Trip Alex 01:01 23:16 500.0
