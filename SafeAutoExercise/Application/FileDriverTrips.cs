@@ -20,11 +20,11 @@ namespace SafeAutoExercise.Application{
             _tripRepo = tripRepo;
         }
 
-        IEnumerable<Driver> IFileDriverTrips.GetAllDrivers()
-        {
-            return _driverRepo.GetAllDrivers();
-        }
-
+        /// <summary>
+        /// EVERYTIME A PROCESS IS EXECUTED IT ADDS DATA TO CURRENT DATA
+        /// ALL TRIPS ACCUMULATE FOR A DRIVER NO SEPARATION OF FILES IS DONE IN THIS EXERCISE
+        /// </summary>
+        /// <param name="msFile"></param>
     void IFileDriverTrips.UploadDriverTripsData(MemoryStream msFile)
         {
             msFile.Position = 0; // Rewind!
@@ -47,27 +47,34 @@ namespace SafeAutoExercise.Application{
                         items = row.Split(delimiterChars);
                         if (items[0].Equals(LineCommand.Driver.Value))
                         {
-                            ///CREATE DRIVERS
-                            Driver d = new Driver() { DriverName = items[1] };
-                            _driverRepo.CreateDriver(d);
-                            drivers.Add(d);
+                            string name = items[1]; //Element in second place is Name of Driver (For exercise assume value is correct)
+                            ///REGISTERS DRIVERS FIRST WE CHECK IF DRIVER ALREADY EXISTS TO UPDATE IT
+                            var entityDriver = _driverRepo.GetDriverByName(name);
+                            if (entityDriver == null)
+                            {
+                                ///CREATE DRIVERS
+                                entityDriver = new Driver() { DriverName = items[1] };
+                                _driverRepo.CreateDriver(entityDriver);
+                            }
+                            drivers.Add(entityDriver);
                         }
                         else if (items[0].Equals(LineCommand.Trip.Value))
                         {
                             //VALIDATIONS ABOUT THE LINE TO BE PROCESSED SHOULD BE APPLIED HERE
                             //DUE TO SIMPLICITY OF THE EXERCISE WILL ASUME ALL DATA IS VALID
-                            
+
                             //First we find the DRIVER TO ASSIGN THE TRIP
                             var driverKey = items[1];
                             var driver = drivers.Find(x => x.DriverName == driverKey);
                             //IF A LINE WITH NON-REGISTRED DRIVER IS PASSED ON, THE LINE IS DISCARTED
                             if (driver != null)
                             {
+                                var drEntity = _driverRepo.GetDriverById(driver.Id);
                                 var startTime = HelperTransform.StringHHMMToTimeSpan(items[2]);
                                 var endTime = HelperTransform.StringHHMMToTimeSpan(items[3]);
                                 var miles = Convert.ToDouble(items[4]);
 
-                                var t = new Trip() { DriverId = driver.Id, StartTime = startTime, EndTime = endTime, Miles = miles };
+                                var t = new Trip() { Driver=drEntity, DriverId = drEntity.Id, StartTime = startTime, EndTime = endTime, Miles = miles };
                                 _tripRepo.CreateTrip(t);
                             }
                         }

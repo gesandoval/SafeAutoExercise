@@ -25,7 +25,17 @@ namespace SafeAutoExercise.Data{
             return new Driver(){ Id=0, DriverName="Dan" };
         }
 
+        Driver IDriverRepo.GetDriverByName(string name)
+        {
+            throw new System.NotImplementedException();
+        }
+
         bool IDriverRepo.SaveChanges()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        void IDriverRepo.UpdateDriver(Driver driver)
         {
             throw new System.NotImplementedException();
         }

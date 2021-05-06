@@ -36,15 +36,31 @@ namespace SafeAutoExercise
             services.AddDbContext<ApplicationDBContext>(options =>
                     options.UseInMemoryDatabase("safeauto_exercisedfDb"));
 
+            ///ALL THIS SERVICES SHOULD BE ADDED IN A EXTENTION INSTEAD OF HERE
+            ///DUE TO TIME IN EXERCISE I JUST LIVE THEM HERE FOR NOW
             services.AddScoped<IFileDriverTrips, FileDriverTrips>();
+            services.AddScoped<IDriverApp, DriverApp>();
 
             services.AddScoped<IDriverRepo, InMemoryDriverRepo>();
 
             services.AddScoped<ITripRepo, InMemoryTripRepo>();
 
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "SafeAutoExercise", Version = "v1" });
+            });
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(
+                    name: "AllowOrigin",
+                    builder => {
+                        builder.AllowAnyOrigin()
+                                .AllowAnyMethod()
+                                .AllowAnyHeader();
+                    });
             });
         }
 
@@ -57,6 +73,8 @@ namespace SafeAutoExercise
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SafeAutoExercise v1"));
             }
+
+            app.UseCors("AllowOrigin");
 
             app.UseHttpsRedirection();
 

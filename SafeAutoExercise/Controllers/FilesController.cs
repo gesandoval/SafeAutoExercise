@@ -26,14 +26,6 @@ namespace SafeAutoExercise.Controllers
              _service = service;
         }
 
-        [HttpGet]
-        public ActionResult<IEnumerable<Driver>> GetAllDrivers()
-        {
-            var driverItems = _service.GetAllDrivers();
-            
-            return Ok(driverItems);
-        }
-
         [HttpPost, DisableRequestSizeLimit]
         public IActionResult Upload()
         {

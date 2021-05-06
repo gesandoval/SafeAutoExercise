@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Commander.Data;
 using SafeAutoExercise.Models;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace SafeAutoExercise.Data{
     public class InMemoryDriverRepo : IDriverRepo
@@ -20,14 +21,30 @@ namespace SafeAutoExercise.Data{
             _context.SaveChanges();
         }
 
+        void IDriverRepo.UpdateDriver(Driver driver)
+        {
+            _context.Update(driver);
+            _context.SaveChanges();
+        }
+
         IEnumerable<Driver> IDriverRepo.GetAllDrivers()
         {
-            return _context.Drivers.ToList<Driver>();
+            
+            return _context.Drivers.Include(trip => trip.Trips).ToList<Driver>();
         }
 
         Driver IDriverRepo.GetDriverById(int id)
         {
-            return _context.Drivers.Single<Driver>(a => a.Id == id );
+            return _context.Drivers.Any(o => o.Id == id) ? 
+                        _context.Drivers.Include(trip => trip.Trips).Single<Driver>(a => a.Id == id ) :
+                        null;
+        }
+
+        Driver IDriverRepo.GetDriverByName(string name)
+        {
+            return _context.Drivers.Any(o => o.DriverName == name) ?
+                        _context.Drivers.Single(o => o.DriverName == name) :
+                        null;
         }
 
         bool IDriverRepo.SaveChanges()

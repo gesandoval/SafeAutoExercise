@@ -9,7 +9,9 @@ namespace SafeAutoExercise.Data
 
         IEnumerable<Driver> GetAllDrivers();
         Driver GetDriverById(int id);
+        Driver GetDriverByName(string name);
         void CreateDriver(Driver driver);
+        void UpdateDriver(Driver driver);
 
     }
 }
